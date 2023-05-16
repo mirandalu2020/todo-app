@@ -29,6 +29,8 @@ function List ({ list, toggleComplete }) {
       let startIndex = (activePage - 1)* states.itemsShown;
       let endIndex = startIndex + states.itemsShown;
       setDisplayed(renderResults.slice(startIndex, endIndex))
+      
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [list, activePage])
 
     console.log(displayed)
