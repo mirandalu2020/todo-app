@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import useForm from '../../hooks/form';
-import { Settingscontext } from '../../Context/Settings'
+import { SettingsContext } from '../../Context/Settings'
 import { v4 as uuid } from 'uuid';
 import List from './../List/List';
 import Header from './../Header/Header';
@@ -14,8 +14,7 @@ const Todo = () => {
 
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
-  const {toggleHideCompleted} = useContext(Settingscontext);
-
+  const { toggleHideCompleted } = useContext(SettingsContext);
 
   function addItem(item) {
     item.id = uuid();
@@ -54,11 +53,15 @@ const Todo = () => {
   return (
     <>
       <Header incomplete={incomplete}/>
+
       <form onSubmit={handleSubmit}>
         <h2>Add To Do Item</h2>
         <label>
           <span>To Do Item</span>
-          <input onChange={handleChange} name="text" type="text" placeholder="Item Details" />
+          <input 
+          onChange={handleChange} 
+          name="text" type="text" 
+          placeholder="Item Details" />
         </label>
 
         <label>

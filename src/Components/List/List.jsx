@@ -1,12 +1,12 @@
 import { Pagination } from '@mantine/core';
 import { useState, useEffect, useContext } from 'react';
 // import { changeItemsShown } from '../../Context/Settings';
-import { Settingscontext} from '../../Context/Settings';
+import { SettingsContext} from '../../Context/Settings';
 
 
 function List ({ list, toggleComplete }) {
 
-  const states = useContext(Settingscontext)
+  const states = useContext(SettingsContext)
 
   const [activePage, setActivePage] = useState(1);
   const [displayed, setDisplayed] = useState([]);
@@ -16,7 +16,8 @@ function List ({ list, toggleComplete }) {
         <p>{item.text}</p>
         <p><small>Assigned to: {item.assignee}</small></p>
         <p><small>Difficulty: {item.difficulty}</small></p>
-        <div onClick={() => toggleComplete(item.id)}> Complete: {item.complete.toString()}
+        <div data-testid = 'completion-status' onClick={() => toggleComplete(item.id)}> 
+        Complete: {item.complete.toString()}
         </div>
         <hr />
       </div>
@@ -36,15 +37,14 @@ function List ({ list, toggleComplete }) {
     console.log(displayed)
 
   return(
-    <>
+    <div data-testid='todo-container'>
     {displayed}
     <Pagination 
     total={Math.ceil(list.length/3)} 
     value = {activePage}
     onChange={setActivePage}
-    
     />
-    </>
+    </div>
 
 
 
