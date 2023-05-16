@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 
 export const Settingscontext = React.createContext();
@@ -5,6 +6,8 @@ export const Settingscontext = React.createContext();
 function SettingProvider ({ children }){
 
   const [hideCompleted, setHideCompleted] = React.useState(true);
+
+  // eslint-disable-next-line
   const [itemsShown, setItemsShown] = React.useState(3);
 
   const toggleHideCompleted = () => {

@@ -24,6 +24,7 @@ const Todo = () => {
     setList([...list, item]);
   }
 
+  // eslint-disable-next-line
   function deleteItem(id) {
     const items = list.filter( item => item.id !== id );
     setList(items);
