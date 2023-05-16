@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 
-export const Settingscontext = React.createContext();
+export const SettingsContext = React.createContext();
 
 function SettingProvider ({ children }){
 
@@ -16,11 +16,11 @@ function SettingProvider ({ children }){
   }
 
   return(
-    <Settingscontext.Provider 
+    <SettingsContext.Provider 
     value={{toggleHideCompleted, itemsShown}}>
       {/* <button onClick={toggleHideCompleted} >Show Completed </button> */}
       {children}
-    </Settingscontext.Provider>
+    </SettingsContext.Provider>
   )
 
 }
