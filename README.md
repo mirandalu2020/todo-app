@@ -23,4 +23,8 @@ To run the application locally, follow these steps:
 1. Clone the repository:
 2. npm install
 3. npm start
-This will start the app and open it in your default browser. If it doesn't open automatically, you can access it at http://localhost:3000.
+This will start the app and open it in your default browser. If it doesn't open automatically, you can access it at http://localhost:3000
+
+## Deployed site with Netlify
+
+#### [Deployed site](https://deploy-preview-4--preeminent-granita-53147e.netlify.app/)
