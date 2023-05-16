@@ -74,6 +74,7 @@ const Todo = () => {
     else if (hideCompleted === false){
       setRenderedList(result);
     }
+    // eslint-disable-next-line
   },[list, hideCompleted, sortMethod])
 
 
