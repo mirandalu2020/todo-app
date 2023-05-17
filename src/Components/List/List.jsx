@@ -1,5 +1,5 @@
 import { Pagination } from '@mantine/core';
-import { NumberInput } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
 import { useState, useEffect, useContext } from 'react';
 import { SettingsContext} from '../../Context/Settings';
 
@@ -13,43 +13,59 @@ function List ({ list, toggleComplete }) {
   const [displayed, setDisplayed] = useState([]);
 
   const renderResults = list.map(item => (
-      <div key={item.id}>
-        <p>{item.text}</p>
+    <div key={item.id}>
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
+
+    <Group position="apart" mt="md" mb="xs">
+      <Text weight={500}>Assigned to: {item.assignee}</Text>
+
+      {item.complete ? <Badge color="green" variant="light" onClick={() => toggleComplete(item.id)}>
+      {item.complete.toString()}
+      </Badge> :
+      <Badge color="pink" variant="light" onClick={() => toggleComplete(item.id)}>
+      {item.complete.toString()}
+      </Badge>}
+
+      {/* <Badge color="pink" variant="light" onClick={() => toggleComplete(item.id)}>
+      {item.complete.toString()}
+      </Badge> */}
+    </Group>
+
+    <Text size="sm" color="dimmed">
+    Assigned to: {item.assignee}
+    </Text>
+    <Text size="sm" color="dimmed">
+    Difficulty: {item.difficulty}
+    </Text>
+  </Card>
+
+        {/* <p>{item.text}</p>
         <p><small>Assigned to: {item.assignee}</small></p>
         <p><small>Difficulty: {item.difficulty}</small></p>
         <div data-testid = 'completion-status' onClick={() => toggleComplete(item.id)}> 
         Complete: {item.complete.toString()}
         </div>
-        <hr />
+        <hr /> */}
       </div>
     ));
     // console.log(renderResults);
-
-    const handleItemsShownChange = (e) =>{
-      console.log(e)
-      states.setItemsShown(e);
-    }
 
     const setPage = () =>{
       console.log(states.itemsShown)
       let startIndex = (activePage - 1)* states.itemsShown;
       let endIndex = startIndex + states.itemsShown;
       setDisplayed(renderResults.slice(startIndex, endIndex))
+      // console.log(displayed)
     }
 
     useEffect(()=>{
       setPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [list, activePage, states.itemsShown])
-    // console.log(displayed)
+    console.log(displayed)
 
   return(
     <div data-testid='todo-container'>
-      <NumberInput
-      onChange={handleItemsShownChange}
-      defaultValue={3}
-      label="Items shown per page"
-      />
       
     {displayed}
     <Pagination 
