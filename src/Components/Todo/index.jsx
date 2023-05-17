@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import useForm from '../../hooks/form';
+import useCustomForm from '../../hooks/form';
+import { Button, Group, Box, TextInput, Slider, RangeSlider } from '@mantine/core';
+import { useForm } from '@mantine/form';
+
 import { SettingsContext } from '../../Context/Settings'
 import { v4 as uuid } from 'uuid';
 import List from './../List/List';
 import Header from './../Header/Header';
-import { Input } from '@mantine/core';
 
 const Todo = () => {
 
@@ -15,7 +17,7 @@ const Todo = () => {
   });
 
   const [incomplete, setIncomplete] = useState([]);
-  const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
+  const { handleChange, handleSubmit } = useCustomForm(addItem, defaultValues);
   const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod } = useContext(SettingsContext);
 
   function addItem(item) {
@@ -75,14 +77,58 @@ const Todo = () => {
       setRenderedList(result);
     }
     // eslint-disable-next-line
-  },[list, hideCompleted, sortMethod])
+  },[list, hideCompleted, sortMethod]);
+
+  const form = useForm({
+    initialValues: {
+      list: list,
+    },
+  });
+
+  const MARKS = [
+    { value: 1, label: '1' },
+    { value: 2, label: '2' },
+    { value: 3, label: '3' },
+    { value: 4, label: '4' },
+    { value: 5, label: '5' },
+  ];
 
 
   return (
     <>
       <Header incomplete={incomplete}/>
 
-      <form onSubmit={handleSubmit}>
+      <Box maw={300} mx="auto">
+      <form onSubmit= {handleSubmit}>
+        <TextInput
+          onChange={handleChange}
+          name="text" 
+          label="To Do Item"
+          placeholder="Item Details"
+        />
+
+      <TextInput
+          onChange={handleChange}
+          name="assignee" 
+          label="Assignee Name"
+          placeholder="Assignee Name"
+        />
+
+    <Slider
+      onChange={handleChange}
+      marks={MARKS}
+      defaultValue={defaultValues.difficulty}
+      step={1}  min={1} max={5}
+      styles={{ markLabel: { display: 'none' } }}
+      />
+
+        <Group position="right" mt="md">
+          <Button type="submit">Submit</Button>
+        </Group>
+      </form>
+    </Box>
+
+      {/* <form onSubmit={handleSubmit}>
         <h2>Add To Do Item</h2>
         <label>
           <span>To Do Item</span>
@@ -105,16 +151,16 @@ const Todo = () => {
         <label>
           <button type="submit">Add Item</button>
         </label>
-      </form>
+      </form> */}
 
-        <button onClick={ ()=> toggleHideCompleted() }>Show Completed</button>
+        {/* <button onClick={ ()=> toggleHideCompleted() }>Show Completed</button>
 
         Sort Method
         <Input component="select" 
         onChange={(e) => changeSortMethod(e.target.value)}> 
         <option value="difficulty_asc">Difficulty Ascending</option>
         <option value="difficulty_dsc">Difficulty Descending</option>
-      </Input>
+      </Input> */}
         <List list={renderedList} toggleComplete={toggleComplete}/>
     </>
   );
