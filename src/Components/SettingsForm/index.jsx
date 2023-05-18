@@ -20,9 +20,18 @@ const SettingsForm = () =>{
     setItemsShown(e);
   }
 
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    form.values.hideCompleted = hideCompleted;
+    form.values.itemsShown = itemsShown;
+    form.values.sortMethod = sortMethod;
+    console.log(form.values)
+    localStorage.setItem('userSettings', JSON.stringify(form.values));
+  }
+
   return (
     <Box maw={300} mx="auto">
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form onSubmit={handleSubmit}>
         {/* <TextInput
           withAsterisk
           label="Email"

@@ -18,12 +18,21 @@ function SettingProvider ({ children }){
     setSortMethod(method)
   }
 
+  const fetchSettings =() => {
+    let settingsObject = JSON.parse(localStorage.getItem('userSettings'));
+    setHideCompleted(settingsObject.hideCompleted);
+    setItemsShown(settingsObject.itemsShown);
+    setSortMethod(settingsObject.sortMethod)
+    return settingsObject;
+  }
+
   return(
     <SettingsContext.Provider 
     value={{
         hideCompleted, toggleHideCompleted, 
         itemsShown, setItemsShown,
         sortMethod, changeSortMethod,
+        fetchSettings
         }}>
       {/* <button onClick={toggleHideCompleted} >Show Completed </button> */}
       {children}

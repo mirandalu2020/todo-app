@@ -18,7 +18,7 @@ const Todo = () => {
 
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useCustomForm(addItem, defaultValues);
-  const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod } = useContext(SettingsContext);
+  const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod, fetchSettings } = useContext(SettingsContext);
 
   function addItem(item) {
     item.id = uuid();
@@ -79,11 +79,15 @@ const Todo = () => {
     // eslint-disable-next-line
   },[list, hideCompleted, sortMethod]);
 
-  const form = useForm({
-    initialValues: {
-      list: list,
-    },
-  });
+  useEffect(()=>{
+    let savedSettings = localStorage.getItem('userSettings');
+    if (savedSettings){
+      let result = fetchSettings();
+      console.log('fetch settings', result)
+    }
+
+    // eslint-disable-next-line
+  },[list])
 
   const MARKS = [
     { value: 1, label: '1' },
@@ -127,40 +131,6 @@ const Todo = () => {
         </Group>
       </form>
     </Box>
-
-      {/* <form onSubmit={handleSubmit}>
-        <h2>Add To Do Item</h2>
-        <label>
-          <span>To Do Item</span>
-          <input 
-          onChange={handleChange} 
-          name="text" type="text" 
-          placeholder="Item Details" />
-        </label>
-
-        <label>
-          <span>Assigned To</span>
-          <input onChange={handleChange} name="assignee" type="text" placeholder="Assignee Name" />
-        </label>
-
-        <label>
-          <span>Difficulty</span>
-          <input onChange={handleChange} defaultValue={defaultValues.difficulty} type="range" min={1} max={5} name="difficulty" />
-        </label>
-
-        <label>
-          <button type="submit">Add Item</button>
-        </label>
-      </form> */}
-
-        {/* <button onClick={ ()=> toggleHideCompleted() }>Show Completed</button>
-
-        Sort Method
-        <Input component="select" 
-        onChange={(e) => changeSortMethod(e.target.value)}> 
-        <option value="difficulty_asc">Difficulty Ascending</option>
-        <option value="difficulty_dsc">Difficulty Descending</option>
-      </Input> */}
         <List list={renderedList} toggleComplete={toggleComplete}/>
     </>
   );

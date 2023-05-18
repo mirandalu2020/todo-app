@@ -5,22 +5,28 @@ import Nav from './Components/Nav/nav'
 import Todo from './Components/Todo';
 import SettingsForm from './Components/SettingsForm';
 import SettingProvider from './Context/Settings';
+import LoginProvider from  './Context/context';
+import Login from './Components/auth/Login';
 
-export default class App extends React.Component {
+function App () {
 
-  render() {
+
     return (
       <>
       <Nav />
       <BrowserRouter>
-        <SettingProvider>
-          <Routes>
+      <LoginProvider> 
+        <Login />
+          <SettingProvider>
+            <Routes>
             <Route path="/" element={<Todo />} />
             <Route path="/settings" element={<SettingsForm />} />
-          </Routes>
-        </SettingProvider>
+            </Routes>
+          </SettingProvider>
+        </LoginProvider>
       </BrowserRouter>
       </>
     );
   }
-}
+
+export default App;
