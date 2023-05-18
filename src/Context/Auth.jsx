@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import cookie from 'react-cookies';
 import jwt_decode from 'jwt-decode';
 
@@ -29,7 +29,7 @@ export const LoginContext = React.createContext();
 
 const initialState = {
   loggedIn: false,
-  user: {},
+  user: { capabilities: []},
   token: '',
   error: null
 }
@@ -47,7 +47,8 @@ function loginReducer(state, action){
 
     case 'LOG_IN_FAILED':
       initialState.error = action.payload
-     return initialState; 
+      console.log(initialState.error)
+     return {...state, initialState}; 
 
     case 'LOG_OUT':
       return initialState
@@ -57,16 +58,16 @@ function loginReducer(state, action){
 }
 
 function LoginProvider({ children }) {
-  const [credential, dispatch] = React.useReducer(loginReducer, initialState);
+  const [state, dispatch] = React.useReducer(loginReducer, initialState);
 
   const can = (capability) => {
-    return credential.user.capability
+    return state.user.capability.includes(capability)
   }
 
   const login = async (username, password) => {
     // let { loggedIn, token, user } = this.state;
     let auth = testUsers[username];
-    console.log(testUsers[username])
+    console.log(username, testUsers[username])
     if (auth && (auth.password === password)) {
       try {
         console.log(auth.token)
@@ -80,6 +81,13 @@ function LoginProvider({ children }) {
         console.error(e);
       }
     }
+    else {
+      dispatch({
+        type: 'LOG_IN_FAILED',
+        payload: 'LOG_IN_FAILED'
+      })
+      return initialState.error = {message: 'Log in error'}
+    }
   }
 
   const logout = () => {
@@ -92,54 +100,37 @@ function LoginProvider({ children }) {
   const validateToken = (token) => {
     try {
       let validUser = jwt_decode(token);
+      console.log('VALID USER, ', validUser)
       dispatch({
         type: 'LOG_IN', 
         payload: validUser
       })
-      // this.setLoginState(true, token, validUser);
+      // setLoginState(token, true,validUser);
     }
     catch (e) {
-      this.setLoginState(false, null, {}, e);
+      setLoginState(false, null, {}, e);
       console.log('Token Validation Error', e);
     }
-
   };
 
   const setLoginState = (token, loggedIn, user, error) => {
     cookie.save('auth', token);
-    // this.setState({ token, loggedIn, user, error: error || null });
   };
 
-  /*
-  componentDidMount() {
+  useEffect(() => {
     const qs = new URLSearchParams(window.location.search);
     const cookieToken = cookie.load('auth');
     const token = qs.get('token') || cookieToken || null;
-    this.validateToken(token);
-  }
-  */
+    validateToken(token);
+  }, []);
 
     return (
-      <LoginContext.Provider value={{credential, can, login, logout}}>
+      <LoginContext.Provider value={{state, can, login, logout}}>
         {children}
       </LoginContext.Provider>
     );
   
 
 }
-
-// class LoginProvider extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       loggedIn: false,
-//       can: this.can,
-//       login: this.login,
-//       logout: this.logout,
-//       user: { capabilities: [] },
-//       error: null,
-//     };
-//   }
-// }
 
 export default LoginProvider;

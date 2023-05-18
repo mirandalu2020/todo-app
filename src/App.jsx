@@ -5,11 +5,11 @@ import Nav from './Components/Nav/nav'
 import Todo from './Components/Todo';
 import SettingsForm from './Components/SettingsForm';
 import SettingProvider from './Context/Settings';
-import LoginProvider from  './Context/context';
+import LoginProvider from  './Context/Auth';
 import Login from './Components/auth/Login';
+import Auth from './Components/auth/Auth'
 
 function App () {
-
 
     return (
       <>
@@ -17,12 +17,14 @@ function App () {
       <BrowserRouter>
       <LoginProvider> 
         <Login />
+        <Auth>
           <SettingProvider>
             <Routes>
             <Route path="/" element={<Todo />} />
             <Route path="/settings" element={<SettingsForm />} />
             </Routes>
           </SettingProvider>
+        </Auth>
         </LoginProvider>
       </BrowserRouter>
       </>

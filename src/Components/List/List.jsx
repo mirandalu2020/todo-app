@@ -1,5 +1,5 @@
 import { Pagination } from '@mantine/core';
-import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
+import { Card, Text, Badge, Group } from '@mantine/core';
 import { useState, useEffect, useContext } from 'react';
 import { SettingsContext} from '../../Context/Settings';
 
@@ -57,13 +57,12 @@ function List ({ list, toggleComplete }) {
       
     {displayed}
     <Pagination 
-    total={Math.ceil(list.length/3)} 
+    total={Math.ceil(list.length/states.itemsShown)} 
     value = {activePage}
     onChange={setActivePage}
     />
     </div>
   )
-
 }
 
 export default List;

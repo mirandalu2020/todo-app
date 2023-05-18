@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import {When} from 'react-if';
 
-import { LoginContext } from '../../Context/context';
+import { LoginContext } from '../../Context/Auth';
 
 function Login(){
 
-  const {credential, can, login, logout} = useContext(LoginContext);
+  const {state, can, login, logout} = useContext(LoginContext);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -17,7 +17,7 @@ function Login(){
     else if (e.target.name === 'password'){
       setPassword(e.target.value )
     }
-    console.log(username, password)
+    // console.log(username, password)
   }
 
   const handleSubmit = (e) => {
@@ -27,11 +27,11 @@ function Login(){
 
     return (
       <>
-        <When condition={credential.loggedIn}>
+        <When condition={state.loggedIn}>
           <button onClick={logout}>Log Out</button>
         </When>
 
-        <When condition={!credential.loggedIn}>
+        <When condition={!state.loggedIn}>
           <form onSubmit={handleSubmit}>
             <input
               placeholder="UserName"
