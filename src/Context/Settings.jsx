@@ -34,7 +34,6 @@ function SettingProvider ({ children }){
         sortMethod, changeSortMethod,
         fetchSettings
         }}>
-      {/* <button onClick={toggleHideCompleted} >Show Completed </button> */}
       {children}
     </SettingsContext.Provider>
   )
