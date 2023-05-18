@@ -25,10 +25,6 @@ function List ({ list, toggleComplete }) {
       <Badge color="pink" variant="light" onClick={() => toggleComplete(item.id)}>
       {item.complete.toString()}
       </Badge>}
-
-      {/* <Badge color="pink" variant="light" onClick={() => toggleComplete(item.id)}>
-      {item.complete.toString()}
-      </Badge> */}
     </Group>
 
     <Text size="sm" color="dimmed">
@@ -38,20 +34,12 @@ function List ({ list, toggleComplete }) {
     Difficulty: {item.difficulty}
     </Text>
   </Card>
-
-        {/* <p>{item.text}</p>
-        <p><small>Assigned to: {item.assignee}</small></p>
-        <p><small>Difficulty: {item.difficulty}</small></p>
-        <div data-testid = 'completion-status' onClick={() => toggleComplete(item.id)}> 
-        Complete: {item.complete.toString()}
-        </div>
-        <hr /> */}
       </div>
     ));
     // console.log(renderResults);
 
     const setPage = () =>{
-      console.log(states.itemsShown)
+      // console.log(states.itemsShown)
       let startIndex = (activePage - 1)* states.itemsShown;
       let endIndex = startIndex + states.itemsShown;
       setDisplayed(renderResults.slice(startIndex, endIndex))
@@ -62,7 +50,7 @@ function List ({ list, toggleComplete }) {
       setPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [list, activePage, states.itemsShown])
-    console.log(displayed)
+    // console.log(displayed)
 
   return(
     <div data-testid='todo-container'>
