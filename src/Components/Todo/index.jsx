@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import useCustomForm from '../../hooks/form';
 import { Button, Group, Box, TextInput, Slider } from '@mantine/core';
-import {get, post} from './../CRUD/crud'
+import {get, post, updateAndDelete} from './../CRUD/crud'
 
 import { SettingsContext } from '../../Context/Settings'
 import { v4 as uuid } from 'uuid';
@@ -24,7 +24,6 @@ const Todo = () => {
     item.id = uuid();
     item.complete = false;
     console.log('ITEM ADDED: ', item);
-    setList([...list, item]);
     const data =  {
       complete: false,
       difficulty: item.difficulty,
@@ -33,22 +32,30 @@ const Todo = () => {
     }
     // https://api-js401.herokuapp.com/api/v1/todo
     let postedTask = await post('/api/v1', 'https://api-js401.herokuapp.com', data, '/todo');
-    console.log(postedTask);
+    console.log('POSTED: ', postedTask);
+    item.id = postedTask._id;
+
+    setList([...list, item]);
+    console.log('LIST', list)
   }
 
-  // eslint-disable-next-line
-  function deleteItem(id) {
+  async function deleteItem(id) {
     const items = list.filter( item => item.id !== id );
     setList(items);
+    await updateAndDelete('delete', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', `/${id}`)
   }
 
-  function toggleComplete(id) {
-    const items = list.map( item => {
+  async function toggleComplete(id) {
+    let data = {}
+    const items = list.map((item) => {
       if ( item.id === id ) {
         item.complete = ! item.complete;
+        data = {"complete": item.complete }
       }
       return item;
     });
+    console.log(data)
+    updateAndDelete('put', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', `/${id}`, data)
     setList(items);
   }
 
@@ -70,7 +77,6 @@ const Todo = () => {
     let incompleteCount = list.filter(item => !item.complete).length;
     setIncomplete(incompleteCount);
     document.title = `To Do List: ${incomplete}`;
-
     // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [list]);  
 
@@ -94,9 +100,22 @@ const Todo = () => {
       let result = fetchSettings();
       console.log('fetch settings', result)
     }
-
     // eslint-disable-next-line
   },[list])
+
+  useEffect(() => {
+    //https://api-js401.herokuapp.com/api/v1/todo
+    async function getData() {
+      let result = await get('/api/v1', 'https://api-js401.herokuapp.com', '/todo')
+      // console.log('LIST ON RENDER', result.results);
+      let listOnRender = result.results.map(item => 
+        item.id = item._id
+      )
+      console.log('LIST ON RENDER', result.results)
+      setList(result.results);
+    }
+    getData();
+  }, [])
 
   const MARKS = [
     { value: 1, label: '1' },
@@ -140,7 +159,7 @@ const Todo = () => {
         </Group>
       </form>
     </Box>
-        <List list={renderedList} toggleComplete={toggleComplete}/>
+        <List list={renderedList} toggleComplete={toggleComplete} deleteItem={deleteItem}/>
     </>
   );
 };

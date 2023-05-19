@@ -1,4 +1,5 @@
 // https://api-js401.herokuapp.com/api/v1/products
+// const axios  = require('axios');
 import { Buffer } from "buffer";
 import axios from 'axios';
 window.Buffer = window.Buffer || Buffer;
@@ -38,11 +39,42 @@ export async function post(url, baseURL, data, model='') {
     data: data,
     headers: { Authorization: `Basic ${token}`}
   }
-
-  let result = await axios(config);
-  console.log(result.data)
-  return result.data
+  try{
+    let result = await axios(config);
+    console.log(result.data)
+    return result.data
+  }catch(e){
+    console.error(e);
+  }
 }
+
+export async function updateAndDelete(method, url, baseURL, model, id, data){
+  const config = {
+    url: url+model+id, 
+    method: method,
+    baseURL: baseURL,
+    data: data
+  }
+
+  try{
+    let result = await axios(config);
+    console.log(result.data);
+    return result.data
+  }
+  catch(e){
+    console.error(e)
+  }
+}
+
+// let data = {
+//   "complete": false
+// }
+
+// https://api-js401.herokuapp.com/api/v1/todo/64333070abaac100142b0401
+
+// updateAndDelete('put', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', '/6466a2a350612000145474c1', data)
+// updateAndDelete('delete', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', '/6466ff1b50612000145476ef')
+
 
 // let data = {
 //   headers: {

@@ -1,30 +1,34 @@
 import { Pagination } from '@mantine/core';
-import { Card, Text, Badge, Group } from '@mantine/core';
+import { Card, Text, Badge, Group, Button } from '@mantine/core';
 import { useState, useEffect, useContext } from 'react';
 import { SettingsContext} from '../../Context/Settings';
 
 // import { IconChevronDown } from '@tabler/icons-react';
 
 
-function List ({ list, toggleComplete }) {
+function List ({ list, toggleComplete, deleteItem }) {
 
   const states = useContext(SettingsContext)
   const [activePage, setActivePage] = useState(1);
   const [displayed, setDisplayed] = useState([]);
 
-  const renderResults = list.map(item => (
-    <div key={item.id}>
+  const renderResults = list.map( (item) => {
+    return <div key={item.id}>
     <Card shadow="sm" padding="lg" radius="md" withBorder>
 
     <Group position="apart" mt="md" mb="xs">
       <Text weight={500}>Assigned to: {item.assignee}</Text>
 
-      {item.complete ? <Badge color="green" variant="light" onClick={() => toggleComplete(item.id)}>
-      {item.complete.toString()}
+      {item.complete ? 
+      <Badge color="green" variant="light" onClick={() => toggleComplete(item.id)}>
+      {`Completed`}
       </Badge> :
-      <Badge color="pink" variant="light" onClick={() => toggleComplete(item.id)}>
-      {item.complete.toString()}
+      <Badge color="pink" variant="light" 
+      onClick={() => toggleComplete(item.id)}>
+      {`pending`}
       </Badge>}
+
+
     </Group>
 
     <Text size="sm" color="dimmed">
@@ -33,9 +37,12 @@ function List ({ list, toggleComplete }) {
     <Text size="sm" color="dimmed">
     Difficulty: {item.difficulty}
     </Text>
+    <Button variant="subtle" color="red" size="xs" compact onClick={() =>deleteItem(item.id)}>
+      DELETE
+    </Button>
   </Card>
       </div>
-    ));
+});
     // console.log(renderResults);
 
     const setPage = () =>{
