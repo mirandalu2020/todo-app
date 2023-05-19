@@ -5,7 +5,7 @@ import { LoginContext } from '../../Context/Auth';
 
 function Login(){
 
-  const {state, can, login, logout} = useContext(LoginContext);
+  const {state, login, logout} = useContext(LoginContext);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
