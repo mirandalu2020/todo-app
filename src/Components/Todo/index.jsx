@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import useCustomForm from '../../hooks/form';
-import { Button, Group, Box, TextInput, Slider, RangeSlider } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Button, Group, Box, TextInput, Slider } from '@mantine/core';
+import {get, post} from './../CRUD/crud'
 
 import { SettingsContext } from '../../Context/Settings'
 import { v4 as uuid } from 'uuid';
@@ -20,11 +20,20 @@ const Todo = () => {
   const { handleChange, handleSubmit } = useCustomForm(addItem, defaultValues);
   const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod, fetchSettings } = useContext(SettingsContext);
 
-  function addItem(item) {
+  async function addItem(item) {
     item.id = uuid();
     item.complete = false;
-    console.log(item);
+    console.log('ITEM ADDED: ', item);
     setList([...list, item]);
+    const data =  {
+      complete: false,
+      difficulty: item.difficulty,
+      text: item.text,
+      assignee: item.assignee
+    }
+    // https://api-js401.herokuapp.com/api/v1/todo
+    let postedTask = await post('/api/v1', 'https://api-js401.herokuapp.com', data, '/todo');
+    console.log(postedTask);
   }
 
   // eslint-disable-next-line

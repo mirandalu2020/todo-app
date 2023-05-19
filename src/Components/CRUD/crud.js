@@ -1,8 +1,10 @@
 // https://api-js401.herokuapp.com/api/v1/products
+import { Buffer } from "buffer";
+import axios from 'axios';
+window.Buffer = window.Buffer || Buffer;
 
-const axios = require('axios');
 
-async function get(url, baseURL, model, id='') {
+export async function get(url, baseURL, model, id='') {
   const config = {
     url: url+model+id,
     method: 'get', 
@@ -14,19 +16,21 @@ async function get(url, baseURL, model, id='') {
   return result.data
 }
 
-async function post(url, baseURL, data, model='') {
+export async function post(url, baseURL, data, model='') {
 
-  /*
+  /*===================================================================================
   //data must contain a "header" attribute if the user is trying to signin
     let data = {
       headers: {
         username: 'Geat person12345',
         password: 'testuser'
       }
-}
+}=======================================================================================
   */
-    const token = Buffer.from(`${data.headers.username}:${data.headers.password}`, 'utf8').toString('base64')
-  // if(model) {url = url + model}
+ let token = '';
+ if(data.headers){
+   token = Buffer.from(`${data.headers.username}:${data.headers.password}`, 'utf8').toString('base64')
+ }
   const config = {
     url: url+model,
     method: 'post', 
@@ -40,19 +44,14 @@ async function post(url, baseURL, data, model='') {
   return result.data
 }
 
-module.exports= {
-  get: get,
-  post: post,
-}
-
-let data = {
-  headers: {
-    username: 'Geat person12345',
-    password: 'testuser'
-  }
-}
+// let data = {
+//   headers: {
+//     username: 'Geat person12345',
+//     password: 'testuser'
+//   }
+// }
 
 
-// https://api-js401.herokuapp.com/signup
-// post('/v1', 'https://api-js401.herokuapp.com/api', '/products', data)
-post('/signin', 'https://api-js401.herokuapp.com', data);
+// // https://api-js401.herokuapp.com/signup
+// // post('/v1', 'https://api-js401.herokuapp.com/api', '/products', data)
+// post('/signin', 'https://api-js401.herokuapp.com', data);

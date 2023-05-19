@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import cookie from 'react-cookies';
 import jwt_decode from 'jwt-decode';
+import {get, post} from './../Components/CRUD/crud'
 
 const testUsers = {
   Admininistrator: {
@@ -65,10 +66,18 @@ function LoginProvider({ children }) {
   }
 
   const login = async (username, password) => {
-    // let { loggedIn, token, user } = this.state;
-    let auth = testUsers[username];
-    console.log(username, testUsers[username])
-    if (auth && (auth.password === password)) {
+    console.log(username, password)
+    let userData = {
+      headers: {
+        username: username,
+        password: password
+      }
+    }
+    let auth = await post('/signin', 'https://api-js401.herokuapp.com', userData);
+    // let auth = testUsers[username];
+    console.log(auth.user.username, auth.token)
+    // if (auth && (auth.password === password)) {
+      if (auth.user.username && auth.token){
       try {
         console.log(auth.token)
         validateToken(auth.token);
@@ -94,7 +103,7 @@ function LoginProvider({ children }) {
     dispatch({
       type: 'LOG_OUT'
     })
-    console.log('logging out')
+    console.log('logging out');
   };
 
   const validateToken = (token) => {
@@ -129,7 +138,6 @@ function LoginProvider({ children }) {
         {children}
       </LoginContext.Provider>
     );
-  
 
 }
 
