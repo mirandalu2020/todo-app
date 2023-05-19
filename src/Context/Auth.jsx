@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import cookie from 'react-cookies';
 import jwt_decode from 'jwt-decode';
-import {get, post} from './../Components/CRUD/crud'
+import {post} from './../Components/CRUD/crud'
 
 const testUsers = {
   Admininistrator: {
