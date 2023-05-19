@@ -18,6 +18,8 @@ const Todo = () => {
 
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useCustomForm(addItem, defaultValues);
+
+  // eslint-disable-next-line
   const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod, fetchSettings } = useContext(SettingsContext);
 
   async function addItem(item) {
@@ -108,7 +110,7 @@ const Todo = () => {
     async function getData() {
       let result = await get('/api/v1', 'https://api-js401.herokuapp.com', '/todo')
       // console.log('LIST ON RENDER', result.results);
-      let listOnRender = result.results.map(item => 
+      result.results.map(item => 
         item.id = item._id
       )
       console.log('LIST ON RENDER', result.results)

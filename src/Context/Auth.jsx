@@ -3,6 +3,7 @@ import cookie from 'react-cookies';
 import jwt_decode from 'jwt-decode';
 import {post} from './../Components/CRUD/crud'
 
+// eslint-disable-next-line
 const testUsers = {
   Admininistrator: {
     password: 'admin',
@@ -131,6 +132,7 @@ function LoginProvider({ children }) {
     const cookieToken = cookie.load('auth');
     const token = qs.get('token') || cookieToken || null;
     validateToken(token);
+    // eslint-disable-next-line
   }, []);
 
     return (
