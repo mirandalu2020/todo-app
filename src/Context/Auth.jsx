@@ -63,7 +63,25 @@ function LoginProvider({ children }) {
   const [state, dispatch] = React.useReducer(loginReducer, initialState);
 
   const can = (capability) => {
-    return state.user.capability.includes(capability)
+    // console.log(state.user.capabilities)
+    return state?.user?.capabilities?.includes(capability)
+  }
+
+  const signup = async(username, password, role='user') =>{
+    const userData = {
+      username: username,
+      password: password,
+      role: role
+    }
+    try{
+      let result = await post('/signup', 'https://api-js401.herokuapp.com', userData);
+      console.log('NEW USER', result);
+      validateToken(result.token);
+      setLoginState(result.token)
+    }catch(e){
+      initialState.error = e;
+      console.error(e);
+    }
   }
 
   const login = async (username, password) => {
@@ -76,7 +94,7 @@ function LoginProvider({ children }) {
     }
     let auth = await post('/signin', 'https://api-js401.herokuapp.com', userData);
     // let auth = testUsers[username];
-    console.log(auth.user.username, auth.token)
+    // console.log(auth.user.username, auth.token)
     // if (auth && (auth.password === password)) {
       if (auth.user.username && auth.token){
       try {
@@ -136,7 +154,7 @@ function LoginProvider({ children }) {
   }, []);
 
     return (
-      <LoginContext.Provider value={{state, can, login, logout}}>
+      <LoginContext.Provider value={{state, can, login, signup, logout}}>
         {children}
       </LoginContext.Provider>
     );

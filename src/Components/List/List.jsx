@@ -8,7 +8,7 @@ import { SettingsContext} from '../../Context/Settings';
 
 function List ({ list, toggleComplete, deleteItem }) {
 
-  const states = useContext(SettingsContext)
+  const states = useContext(SettingsContext);
   const [activePage, setActivePage] = useState(1);
   const [displayed, setDisplayed] = useState([]);
 
@@ -32,7 +32,7 @@ function List ({ list, toggleComplete, deleteItem }) {
     </Group>
 
     <Text size="sm" color="dimmed">
-    Assigned to: {item.assignee}
+    Task: {item.text}
     </Text>
     <Text size="sm" color="dimmed">
     Difficulty: {item.difficulty}
