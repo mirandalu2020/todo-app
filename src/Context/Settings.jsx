@@ -3,14 +3,14 @@ import React from 'react';
 
 export const SettingsContext = React.createContext();
 
-function SettingProvider ({ children }){
+function SettingProvider ({ capabilities, children }){
 
   const [hideCompleted, setHideCompleted] = React.useState(true);
   const [itemsShown, setItemsShown] = React.useState(3);
   const [sortMethod, setSortMethod] = React.useState('difficulty_asc');
 
   const toggleHideCompleted = () => {
-    setHideCompleted(current => !current);
+      setHideCompleted(current => !current);
     // console.log(hideCompleted);
   }
 

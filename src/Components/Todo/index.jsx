@@ -3,7 +3,8 @@ import useCustomForm from '../../hooks/form';
 import { Button, Group, Box, TextInput, Slider } from '@mantine/core';
 import {get, post, updateAndDelete} from './../CRUD/crud'
 
-import { SettingsContext } from '../../Context/Settings'
+import { SettingsContext } from '../../Context/Settings';
+import { LoginContext  } from '../../Context/Auth';
 import { v4 as uuid } from 'uuid';
 import List from './../List/List';
 import Header from './../Header/Header';
@@ -21,48 +22,69 @@ const Todo = () => {
 
   // eslint-disable-next-line
   const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod, fetchSettings } = useContext(SettingsContext);
+  const { can } = useContext(LoginContext);
 
   async function addItem(item) {
     item.id = uuid();
     item.complete = false;
-    console.log('ITEM ADDED: ', item);
-    const data =  {
-      complete: false,
-      difficulty: item.difficulty,
-      text: item.text,
-      assignee: item.assignee
+    // console.log('ITEM ADDED: ', item);
+    if (can('create')){
+      console.log('CAN CREATE')
+      const data =  {
+        complete: false,
+        difficulty: item.difficulty,
+        text: item.text,
+        assignee: item.assignee
+      }
+      // https://api-js401.herokuapp.com/api/v1/todo
+      let postedTask = await post('/api/v1', 'https://api-js401.herokuapp.com', data, '/todo');
+      // console.log('POSTED: ', postedTask);
+      item.id = postedTask._id;
+      setList([...list, item]);
     }
-    // https://api-js401.herokuapp.com/api/v1/todo
-    let postedTask = await post('/api/v1', 'https://api-js401.herokuapp.com', data, '/todo');
-    console.log('POSTED: ', postedTask);
-    item.id = postedTask._id;
+    else{
+      alert('You have no post capabilities')
+      console.log('NOOOOO!!!')
+    }
 
-    setList([...list, item]);
-    console.log('LIST', list)
+    // console.log('LIST', list)
   }
 
   async function deleteItem(id) {
-    const items = list.filter( item => item.id !== id );
-    setList(items);
-    await updateAndDelete('delete', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', `/${id}`)
+    if (can('delete')){
+
+      const items = list.filter( item => item.id !== id );
+      setList(items);
+      await updateAndDelete('delete', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', `/${id}`)
+    }
+    else{
+      alert('DO NOT DELETE OTHER PEOPLE\'S TASKS')
+    }
   }
 
   async function toggleComplete(id) {
     let data = {}
-    const items = list.map((item) => {
-      if ( item.id === id ) {
-        item.complete = ! item.complete;
-        data = {"complete": item.complete }
-      }
-      return item;
-    });
-    console.log(data)
-    updateAndDelete('put', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', `/${id}`, data)
-    setList(items);
+
+    if (can('update')){
+
+      const items = list.map((item) => {
+        if ( item.id === id ) {
+          item.complete = ! item.complete;
+          data = {"complete": item.complete }
+        }
+        return item;
+      });
+      console.log(data)
+      updateAndDelete('put', '/api/v1', 'https://api-js401.herokuapp.com', '/todo', `/${id}`, data)
+      setList(items);
+    }
+    else{
+      alert('NOT YOUR CIRCUT, NOT YOUR MONKEY TO UPDATE')
+    }
   }
 
   function sortItem(){
-    console.log('SORTING METHOD', sortMethod)
+    // console.log('SORTING METHOD', sortMethod)
     // console.log('LIST, ', list)
     if (sortMethod === 'difficulty_asc'){
       let sortedList = list.sort((firstItem, secondItem) => firstItem.difficulty - secondItem.difficulty);
@@ -84,7 +106,7 @@ const Todo = () => {
 
   useEffect(()=>{
     let result = sortItem();
-    console.log('RESULT, ', result);
+    // console.log('RESULT, ', result);
     // setList(result)
     if (hideCompleted === true){
       let display = result.filter(item=> !item.complete);
@@ -113,7 +135,7 @@ const Todo = () => {
       result.results.map(item => 
         item.id = item._id
       )
-      console.log('LIST ON RENDER', result.results)
+      // console.log('LIST ON RENDER', result.results)
       setList(result.results);
     }
     getData();

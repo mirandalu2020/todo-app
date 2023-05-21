@@ -17,7 +17,7 @@ function App () {
       <BrowserRouter>
       <LoginProvider> 
         <Login />
-        <Auth>
+        <Auth capability='read'>
           <SettingProvider>
             <Routes>
             <Route path="/" element={<Todo />} />
