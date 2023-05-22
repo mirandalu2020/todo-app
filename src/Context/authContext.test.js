@@ -1,5 +1,5 @@
 import LoginProvider, { LoginContext } from './Auth';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen} from '@testing-library/react';
 
 describe('Testing the Auth Context Provider', ()=>{
 

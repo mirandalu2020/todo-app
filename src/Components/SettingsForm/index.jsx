@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Checkbox, Button, Group, Box, NumberInput, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { SettingsContext } from '../../Context/Settings'
+import './settings.scss'
 
 const SettingsForm = () =>{
 
@@ -31,13 +32,9 @@ const SettingsForm = () =>{
 
   return (
     <Box maw={300} mx="auto">
+      
       <form onSubmit={handleSubmit}>
-        {/* <TextInput
-          withAsterisk
-          label="Email"
-          placeholder="your@email.com"
-          {...form.getInputProps('email')}
-        /> */}
+      <h3>Settings</h3>
 
     <Select
       label="Sort By"
