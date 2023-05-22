@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import useCustomForm from '../../hooks/form';
-import { Button, Group, Box, TextInput, Slider } from '@mantine/core';
+import { Button, Group, Box, TextInput, Slider, Container } from '@mantine/core';
 import {get, post, updateAndDelete} from './../CRUD/crud'
 
 import { SettingsContext } from '../../Context/Settings';
@@ -8,6 +8,7 @@ import { LoginContext  } from '../../Context/Auth';
 import { v4 as uuid } from 'uuid';
 import List from './../List/List';
 import Header from './../Header/Header';
+import './todo.scss'
 
 const Todo = () => {
 
@@ -21,7 +22,7 @@ const Todo = () => {
   const { handleChange, handleSubmit } = useCustomForm(addItem, defaultValues);
 
   // eslint-disable-next-line
-  const { toggleHideCompleted, hideCompleted, sortMethod, changeSortMethod, fetchSettings } = useContext(SettingsContext);
+  const { hideCompleted, sortMethod, fetchSettings } = useContext(SettingsContext);
   const { can } = useContext(LoginContext);
 
   async function addItem(item) {
@@ -151,7 +152,7 @@ const Todo = () => {
 
 
   return (
-    <>
+    <Container>
       <Header incomplete={incomplete}/>
 
       <Box maw={300} mx="auto">
@@ -184,7 +185,7 @@ const Todo = () => {
       </form>
     </Box>
         <List list={renderedList} toggleComplete={toggleComplete} deleteItem={deleteItem}/>
-    </>
+    </Container>
   );
 };
 

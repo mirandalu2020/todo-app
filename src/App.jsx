@@ -6,17 +6,18 @@ import Todo from './Components/Todo';
 import SettingsForm from './Components/SettingsForm';
 import SettingProvider from './Context/Settings';
 import LoginProvider from  './Context/Auth';
-import Login from './Components/auth/Login';
 import Auth from './Components/auth/Auth'
+
+import './App.css';
 
 function App () {
 
     return (
       <>
-      <Nav />
       <BrowserRouter>
-      <LoginProvider> 
-        <Login />
+      <LoginProvider>
+        <div className='body-container'>
+        <Nav />
         <Auth capability='read'>
           <SettingProvider>
             <Routes>
@@ -25,6 +26,7 @@ function App () {
             </Routes>
           </SettingProvider>
         </Auth>
+          </div> 
         </LoginProvider>
       </BrowserRouter>
       </>

@@ -1,14 +1,12 @@
-import React, { useContext } from 'react';
-import { When } from 'react-if';
-
-import { createStyles, Button, getStylesRef, rem } from '@mantine/core';
+import { useState } from 'react';
+import { createStyles, Navbar, Group, Code, getStylesRef, rem } from '@mantine/core';
 import {
-  IconLogout,
+  IconSettings,
+  IconHome,
 } from '@tabler/icons-react';
 
-import { LoginContext } from '../../Context/Auth';
-import LoginModal from './LoginModal';
-import SignupModal from './SignupModal';
+import Login from './../auth/Login'
+import './nav.scss'
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -65,53 +63,46 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-function Login(){
-  
-  // eslint-disable-next-line
+const data = [
+  { link: '/', label: 'Home', icon: IconHome },
+  { link: '/settings', label: 'Settings', icon: IconSettings },
+];
+
+function Nav() {
   const { classes, cx } = useStyles();
+  const [active, setActive] = useState('Home');
 
-  const {state, login, logout, signup} = useContext(LoginContext);
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [role, setRole] = React.useState('user');
+  
 
-  const handleChange = (e) =>{
-    // console.log(e)
-    if (e.target.name === 'username'){
-      setUsername(e.target.value)
-    }
-    else if (e.target.name === 'password'){
-      setPassword(e.target.value)
-    }
-    // console.log(username, password)
-  }
+  const links = data.map((item) => (
+    <a
+      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      href={item.link}
+      key={item.label}
+      onClick={(event) => {
+        // event.preventDefault();
+        setActive(item.label);
+      }}
+    >
+      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <span>{item.label}</span>
+    </a>
+  ));
 
-  const handleSubmit = (e, callback) => {
-    e.preventDefault();
-    callback(username, password, role);
-  };
+  return (
+    <Navbar height={'97vh'} width={{ sm: 300 }} position="fixed">
+      <Navbar.Section grow>
+        <Group className={classes.header} position="apart">
+          <Code sx={{ fontWeight: 700 }}>Todo App: v.1.1.0</Code>
+        </Group>
+        {links}
+      </Navbar.Section>
 
-    return (
-      <>
-        <When condition={state.loggedIn}>
-        <Button onClick={logout} >
-          <IconLogout />
-          <span>Logout</span>
-          </Button>
-        </When>
+      <Navbar.Section className={classes.footer}>
+        <Login />
+      </Navbar.Section>
+    </Navbar>
+  );
+}
 
-        <When condition={!state.loggedIn}>
-          <LoginModal 
-          handleChange={handleChange} handleSubmit={handleSubmit}
-          login={login} classes={classes} state={state}/>
-
-
-        <SignupModal 
-        signup={signup} classes={classes} handleChange={handleChange} handleSubmit={handleSubmit} setRole={setRole}
-        />
-        </When>
-      </>
-    );
-  }
-
-export default Login;
+export default Nav
