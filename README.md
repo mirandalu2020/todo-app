@@ -14,7 +14,7 @@ Delete Tasks: Users can remove tasks from the list by clicking the trash icon ne
 
 ## UML
 
-![ToDo App Day 1](UML/todo-app.png)
+![UML](UML/todo-app.gif)
 
 ## Installation
 
