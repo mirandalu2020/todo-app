@@ -27,4 +27,4 @@ This will start the app and open it in your default browser. If it doesn't open 
 
 ## Deployed site with Netlify
 
-#### [Deployed site](https://deploy-preview-4--preeminent-granita-53147e.netlify.app/)
+#### [Deployed site](https://main--preeminent-granita-53147e.netlify.app/)
